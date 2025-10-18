@@ -100,33 +100,62 @@
         </button>
       </div>
 
-      <!-- Participants Table -->
-      <div class="bg-white rounded-lg shadow">
-        <div class="p-6 border-b border-gray-200">
-          <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-            <h2 class="text-2xl font-bold text-gray-900">Lista de Participantes</h2>
+      <!-- Tabs Navigation -->
+      <div class="bg-white rounded-lg shadow mb-8">
+        <div class="border-b border-gray-200">
+          <nav class="flex -mb-px">
+            <button
+              @click="activeTab = 'participants'"
+              :class="[
+                'px-6 py-4 text-sm font-medium border-b-2 transition-colors',
+                activeTab === 'participants'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              ]"
+            >
+              👥 Participantes
+            </button>
+            <button
+              @click="activeTab = 'winners'"
+              :class="[
+                'px-6 py-4 text-sm font-medium border-b-2 transition-colors',
+                activeTab === 'winners'
+                  ? 'border-purple-600 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              ]"
+            >
+              🏆 Historial de Ganadores
+            </button>
+          </nav>
+        </div>
 
-            <!-- Search and Filter -->
-            <div class="flex gap-2">
-              <input
-                v-model="searchQuery"
-                @input="handleSearch"
-                type="text"
-                placeholder="Buscar..."
-                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              />
-              <select
-                v-model="filterVerified"
-                @change="loadParticipants"
-                class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-              >
-                <option value="">Todos</option>
-                <option value="true">Verificados</option>
-                <option value="false">Pendientes</option>
-              </select>
+        <!-- Participants Tab Content -->
+        <div v-show="activeTab === 'participants'">
+          <div class="p-6 border-b border-gray-200">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+              <h2 class="text-2xl font-bold text-gray-900">Lista de Participantes</h2>
+
+              <!-- Search and Filter -->
+              <div class="flex gap-2">
+                <input
+                  v-model="searchQuery"
+                  @input="handleSearch"
+                  type="text"
+                  placeholder="Buscar..."
+                  class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+                <select
+                  v-model="filterVerified"
+                  @change="loadParticipants"
+                  class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                >
+                  <option value="">Todos</option>
+                  <option value="true">Verificados</option>
+                  <option value="false">Pendientes</option>
+                </select>
+              </div>
             </div>
           </div>
-        </div>
 
         <!-- Loading State -->
         <div v-if="participantsLoading" class="p-8 text-center">
@@ -189,9 +218,97 @@
           </table>
         </div>
 
-        <!-- Empty State -->
-        <div v-else class="p-8 text-center text-gray-500">
-          No hay participantes registrados
+          <!-- Empty State -->
+          <div v-else class="p-8 text-center text-gray-500">
+            No hay participantes registrados
+          </div>
+        </div>
+
+        <!-- Winners History Tab Content -->
+        <div v-show="activeTab === 'winners'">
+          <div class="p-6">
+            <h2 class="text-2xl font-bold text-gray-900 mb-4">Historial de Sorteos</h2>
+            <p class="text-gray-600 mb-6">
+              Lista completa de todos los sorteos realizados
+            </p>
+
+            <!-- Loading State -->
+            <div v-if="winnersLoading" class="p-8 text-center">
+              <div class="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-purple-600"></div>
+              <p class="mt-2 text-gray-600">Cargando ganadores...</p>
+            </div>
+
+            <!-- Winners Grid -->
+            <div v-else-if="winners.length > 0" class="space-y-4">
+              <div
+                v-for="winner in winners"
+                :key="winner.id"
+                class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg p-6 border border-purple-200 hover:shadow-lg transition-shadow"
+              >
+                <div class="flex items-start justify-between">
+                  <div class="flex-1">
+                    <div class="flex items-center gap-3 mb-3">
+                      <div class="text-4xl">🏆</div>
+                      <div>
+                        <h3 class="text-xl font-bold text-purple-900">{{ winner.participant_name }}</h3>
+                        <p class="text-sm text-purple-600">
+                          Sorteado el {{ formatDate(winner.drawn_at) }}
+                        </p>
+                      </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                      <div class="flex items-center gap-2 text-gray-700">
+                        <span class="text-lg">📧</span>
+                        <span class="text-sm">{{ winner.participant_email }}</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-gray-700">
+                        <span class="text-lg">📱</span>
+                        <span class="text-sm">{{ winner.participant_phone }}</span>
+                      </div>
+                      <div class="flex items-center gap-2 text-gray-700">
+                        <span class="text-lg">👤</span>
+                        <span class="text-sm">Sorteado por: {{ winner.drawn_by_name }}</span>
+                      </div>
+                      <div class="flex items-center gap-2">
+                        <span
+                          v-if="winner.notified"
+                          class="px-3 py-1 bg-green-100 text-green-800 text-xs font-semibold rounded-full flex items-center gap-1"
+                        >
+                          <span>✅</span>
+                          Notificado
+                        </span>
+                        <span
+                          v-else
+                          class="px-3 py-1 bg-yellow-100 text-yellow-800 text-xs font-semibold rounded-full flex items-center gap-1"
+                        >
+                          <span>⏳</span>
+                          Pendiente notificación
+                        </span>
+                      </div>
+                    </div>
+
+                    <div class="mt-4 pt-4 border-t border-purple-200">
+                      <p class="text-sm text-gray-600">
+                        <strong>Premio:</strong> {{ winner.prize_description || 'Estadía de 2 noches para pareja en hotel todo incluido' }}
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Empty State -->
+            <div v-else class="p-12 text-center">
+              <div class="text-6xl mb-4">🎲</div>
+              <h3 class="text-xl font-semibold text-gray-700 mb-2">
+                No hay sorteos realizados aún
+              </h3>
+              <p class="text-gray-500">
+                Realiza tu primer sorteo para ver el historial de ganadores aquí
+              </p>
+            </div>
+          </div>
         </div>
       </div>
     </main>
@@ -212,6 +329,14 @@ onMounted(() => {
   } else {
     loadStats()
     loadParticipants()
+    loadWinners()
+  }
+})
+
+// Watch tab changes to load data
+watch(activeTab, (newTab) => {
+  if (newTab === 'winners' && winners.value.length === 0) {
+    loadWinners()
   }
 })
 
@@ -231,6 +356,13 @@ const drawLoading = ref(false)
 const drawError = ref('')
 const winnerMessage = ref('')
 const latestWinner = ref<any>(null)
+
+// Tab management
+const activeTab = ref('participants')
+
+// Winners history
+const winners = ref<any[]>([])
+const winnersLoading = ref(false)
 
 // Load statistics
 const loadStats = async () => {
@@ -266,6 +398,19 @@ const handleSearch = () => {
   searchTimeout = setTimeout(() => {
     loadParticipants()
   }, 500)
+}
+
+// Load winners history
+const loadWinners = async () => {
+  winnersLoading.value = true
+  try {
+    const data: any = await api.getWinners()
+    winners.value = data.results || data
+  } catch (error) {
+    console.error('Error loading winners:', error)
+  } finally {
+    winnersLoading.value = false
+  }
 }
 
 // Draw winner with EPIC animation
@@ -389,6 +534,7 @@ const handleDraw = async () => {
     latestWinner.value = response.winner
     await loadStats()
     await loadParticipants()
+    await loadWinners() // Reload winners history
   } catch (error: any) {
     Swal.close()
     await Swal.fire({
