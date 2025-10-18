@@ -249,7 +249,11 @@ class WinnerViewSet(viewsets.ReadOnlyModelViewSet):
 
         # Enviar notificación al ganador (modo síncrono para desarrollo)
         # Para producción con Celery: usar send_winner_notification.delay(str(winner.id))
-        send_winner_notification_sync(winner.id)
+        try:
+            send_winner_notification_sync(winner.id)
+        except Exception as e:
+            # Si falla el email, no detener el sorteo
+            print(f"⚠️ Error enviando notificación: {str(e)}")
 
         return Response({
             'message': '¡Ganador seleccionado exitosamente!',

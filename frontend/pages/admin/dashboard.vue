@@ -322,24 +322,7 @@ import confetti from 'canvas-confetti'
 const api = useApi()
 const router = useRouter()
 
-// Check authentication
-onMounted(() => {
-  if (typeof window !== 'undefined' && !localStorage.getItem('access_token')) {
-    router.push('/admin/login')
-  } else {
-    loadStats()
-    loadParticipants()
-    loadWinners()
-  }
-})
-
-// Watch tab changes to load data
-watch(activeTab, (newTab) => {
-  if (newTab === 'winners' && winners.value.length === 0) {
-    loadWinners()
-  }
-})
-
+// Reactive state - declare FIRST
 const stats = ref({
   total_participants: 0,
   verified: 0,
@@ -363,6 +346,24 @@ const activeTab = ref('participants')
 // Winners history
 const winners = ref<any[]>([])
 const winnersLoading = ref(false)
+
+// Watch tab changes to load data (AFTER declaring activeTab)
+watch(activeTab, (newTab) => {
+  if (newTab === 'winners' && winners.value.length === 0) {
+    loadWinners()
+  }
+})
+
+// Check authentication
+onMounted(() => {
+  if (typeof window !== 'undefined' && !localStorage.getItem('access_token')) {
+    router.push('/admin/login')
+  } else {
+    loadStats()
+    loadParticipants()
+    loadWinners()
+  }
+})
 
 // Load statistics
 const loadStats = async () => {
@@ -439,36 +440,80 @@ const handleDraw = async () => {
   winnerMessage.value = ''
   latestWinner.value = null
 
-  // Mostrar animación de sorteo
-  let timerInterval: any
+  // PASO 1: Cuenta regresiva dramática
+  for (let i = 3; i >= 1; i--) {
+    await Swal.fire({
+      title: '',
+      html: `
+        <div class="py-12">
+          <div class="text-9xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent animate-pulse">
+            ${i}
+          </div>
+        </div>
+      `,
+      showConfirmButton: false,
+      allowOutsideClick: false,
+      timer: 800,
+      timerProgressBar: false,
+      customClass: {
+        popup: 'rounded-xl'
+      }
+    })
+  }
+
+  // PASO 2: Efecto de ruleta con nombres girando + llamada API
+  const rouletteNames = participants.value
+    .filter(p => p.is_verified)
+    .map(p => p.full_name)
+
+  let currentIndex = 0
+  let rouletteInterval: any
+
+  // Iniciar la llamada al API en paralelo
+  const drawPromise = api.drawWinner()
+
   Swal.fire({
     title: '🎰 Sorteando...',
     html: `
       <div class="py-8">
-        <div class="text-6xl mb-4 animate-bounce">🎲</div>
-        <div class="text-xl font-bold text-purple-600 mb-2">Girando el tambor...</div>
-        <div class="text-gray-600">Seleccionando ganador aleatorio</div>
-        <div class="mt-4">
-          <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-4 border-purple-600"></div>
+        <div class="text-6xl mb-6 animate-bounce">🎲</div>
+        <div class="bg-gradient-to-r from-purple-100 to-pink-100 rounded-xl p-6 mb-4">
+          <div id="roulette-name" class="text-3xl font-bold text-purple-900 min-h-[3rem] transition-all duration-100">
+            ${rouletteNames[0] || 'Girando...'}
+          </div>
         </div>
+        <div class="text-gray-600 animate-pulse">Seleccionando ganador...</div>
       </div>
     `,
     showConfirmButton: false,
     allowOutsideClick: false,
     didOpen: () => {
-      // Agregar animación de pulso a los iconos
-      const icon = Swal.getPopup()?.querySelector('.text-6xl')
-      if (icon) {
-        icon.classList.add('animate-pulse')
-      }
+      // Animar nombres girando rápidamente
+      rouletteInterval = setInterval(() => {
+        currentIndex = (currentIndex + 1) % rouletteNames.length
+        const nameElement = document.getElementById('roulette-name')
+        if (nameElement && rouletteNames[currentIndex]) {
+          nameElement.style.transform = 'scale(0.8)'
+          nameElement.style.opacity = '0.5'
+          setTimeout(() => {
+            nameElement.textContent = rouletteNames[currentIndex]
+            nameElement.style.transform = 'scale(1)'
+            nameElement.style.opacity = '1'
+          }, 50)
+        }
+      }, 100)
     },
     willClose: () => {
-      clearInterval(timerInterval)
+      clearInterval(rouletteInterval)
     }
   })
 
   try {
-    const response: any = await api.drawWinner()
+    // Esperar mínimo 2 segundos para que se vea la ruleta
+    const [response] = await Promise.all([
+      drawPromise,
+      new Promise(resolve => setTimeout(resolve, 2000))
+    ])
 
     // Cerrar animación de sorteo
     Swal.close()
