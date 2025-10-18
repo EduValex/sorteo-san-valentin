@@ -1,0 +1,31 @@
+# Backend Dependencies - Sorteo San Valentin
+Django==5.0.1
+djangorestframework==3.14.0
+django-cors-headers==4.3.1
+celery==5.3.6
+redis==5.0.1
+python-decouple==3.8
+psycopg2-binary==2.9.9
+django-celery-beat==2.5.0
+django-celery-results==2.5.1
+
+# Authentication & Security
+djangorestframework-simplejwt==5.3.1
+django-rest-passwordreset==1.4.0
+
+# Email
+django-anymail==10.2
+
+# Utilities
+python-dateutil==2.8.2
+pytz==2024.1
+
+# Development
+django-extensions==3.2.3
+ipython==8.20.0
+
+# Testing (opcional pero recomendado)
+pytest==7.4.4
+pytest-django==4.7.0
+factory-boy==3.3.0
+faker==22.0.0

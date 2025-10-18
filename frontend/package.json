@@ -1,0 +1,24 @@
+{
+  "name": "sorteo-san-valentin-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview"
+  },
+  "dependencies": {
+    "canvas-confetti": "^1.9.3",
+    "nuxt": "^3.13.0",
+    "sweetalert2": "^11.26.3",
+    "vue": "latest",
+    "vue-router": "latest"
+  },
+  "devDependencies": {
+    "@nuxt/devtools": "latest",
+    "@nuxtjs/tailwindcss": "^6.12.0",
+    "axios": "^1.7.2"
+  }
+}
