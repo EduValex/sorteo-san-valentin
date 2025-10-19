@@ -181,4 +181,5 @@ EMAIL_USE_TLS = True
 EMAIL_HOST_USER = 'apikey'  # siempre literal 'apikey'
 EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@ctsturismo.cl')
-        
+FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://sorteo-san-valentin.vercel.app')
+
