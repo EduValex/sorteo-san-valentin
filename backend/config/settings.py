@@ -172,15 +172,13 @@ SIMPLE_JWT = {
 }
 
 # ==========================
-# EMAIL (SendGrid via Anymail)
+# EMAIL (SendGrid mínimo para que funcione)
 # ==========================
-EMAIL_BACKEND = 'anymail.backends.sendgrid.EmailBackend'
-ANYMAIL = {
-    'SENDGRID_API_KEY': os.getenv('SENDGRID_API_KEY'),
-}
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.sendgrid.net'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = 'apikey'  # siempre literal 'apikey'
+EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')
 DEFAULT_FROM_EMAIL = os.getenv('DEFAULT_FROM_EMAIL', 'noreply@ctsturismo.cl')
-
-# ==========================
-# FRONTEND URL (para links en emails)
-# ==========================
-FRONTEND_URL = os.getenv('FRONTEND_URL', 'https://sorteo-san-valentin.vercel.app')
+        
