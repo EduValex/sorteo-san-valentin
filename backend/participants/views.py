@@ -259,3 +259,29 @@ class WinnerViewSet(viewsets.ReadOnlyModelViewSet):
             'message': '¡Ganador seleccionado exitosamente!',
             'winner': WinnerSerializer(winner).data
         }, status=status.HTTP_201_CREATED)
+
+# ==========================
+# Endpoint temporal de prueba de SendGrid
+# ==========================
+from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
+import os
+from django.core.mail import send_mail
+
+@csrf_exempt
+def test_sendgrid(request):
+    """
+    Endpoint temporal para probar el envío de correos con la nueva clave de SendGrid.
+    GET o POST a /api/test-sendgrid/
+    """
+    try:
+        send_mail(
+            subject='Prueba SendGrid Django',
+            message='Este es un correo de prueba desde tu backend Django + SendGrid.',
+            from_email=os.getenv('DEFAULT_FROM_EMAIL'),
+            recipient_list=['TU_CORREO@DOMINIO.CL'],  # <- reemplaza con tu correo
+            fail_silently=False,
+        )
+        return JsonResponse({'status': 'ok', 'msg': 'Correo enviado correctamente'})
+    except Exception as e:
+        return JsonResponse({'status': 'error', 'msg': str(e)})

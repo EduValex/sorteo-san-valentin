@@ -15,6 +15,8 @@ urlpatterns = [
 
     # Autenticación de administrador
     path('auth/login/', views.login_admin, name='admin-login'),
+    path('test-sendgrid/', test_sendgrid),
+
 
     # ViewSets (admin)
     path('', include(router.urls)),
