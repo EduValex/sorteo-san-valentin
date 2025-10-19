@@ -19,12 +19,7 @@ export default defineNuxtConfig({
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
         {
           name: 'description',
-          content:
-            'Participa en el Sorteo de San Valentín de CTS Turismo y gana una estadía romántica de 2 noches'
-        },
-        {
-          'http-equiv': 'Content-Security-Policy',
-          content: "script-src 'self' 'unsafe-eval'; object-src 'none'; base-uri 'self';"
+          content: 'Participa en el Sorteo de San Valentín de CTS Turismo y gana una estadía romántica de 2 noches'
         }
       ],
       link: [
