@@ -279,7 +279,7 @@ def test_sendgrid(request):
             subject='Prueba SendGrid Django',
             message='Este es un correo de prueba desde tu backend Django + SendGrid.',
             from_email=os.getenv('DEFAULT_FROM_EMAIL'),
-            recipient_list=['TU_CORREO@DOMINIO.CL'],  # <- reemplaza con tu correo
+            recipient_list=['valenzuela.edo@gmail.com'],  # <- reemplaza con tu correo
             fail_silently=False,
         )
         return JsonResponse({'status': 'ok', 'msg': 'Correo enviado correctamente'})
