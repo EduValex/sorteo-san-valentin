@@ -51,6 +51,7 @@ Sistema Full Stack para gestionar un sorteo de San Valentín donde los participa
 
 ## Uso
 El sistema está desplegado para su prueba en tiempo real. 
+
 NOTA: Utilizar Google Chrome. Algunos navegadores pueden bloquear la aplicación 
 
 ### Para Participantes:
