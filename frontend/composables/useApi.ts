@@ -33,11 +33,26 @@ export const useApi = () => {
       })
 
       if (!response.ok) {
-        const error = await response.json().catch(() => ({
-          error: 'Error en la petición'
-        }))
-        throw new Error(error.error || error.detail || 'Error desconocido')
+        const errorData = await response.json().catch(() => ({}))
+
+        let message = 'Error desconocido'
+
+        if (typeof errorData === 'string') {
+          message = errorData
+        } else if (errorData.detail) {
+          message = errorData.detail
+        } else if (errorData.error) {
+          message = errorData.error
+        } else if (Object.keys(errorData).length > 0) {
+          // Combinar mensajes de validación tipo { field: ["msg1", "msg2"], ... }
+          message = Object.entries(errorData)
+            .map(([field, msgs]) => `${field}: ${(Array.isArray(msgs) ? msgs.join(', ') : msgs)}`)
+            .join(' | ')
+        }
+
+        throw new Error(message)
       }
+
 
       return await response.json()
     } catch (error) {
