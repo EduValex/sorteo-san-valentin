@@ -1,8 +1,6 @@
 from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from . import views
-from .views import test_sendgrid
-
 
 # Router para ViewSets
 router = DefaultRouter()
@@ -17,8 +15,7 @@ urlpatterns = [
 
     # Autenticación de administrador
     path('auth/login/', views.login_admin, name='admin-login'),
-    path('test-sendgrid/', test_sendgrid),
-
+    path('test-sendgrid/', views.test_sendgrid, name='test-sendgrid'),
 
     # ViewSets (admin)
     path('', include(router.urls)),
