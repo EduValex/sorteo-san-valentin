@@ -1,18 +1,23 @@
 from django.apps import AppConfig
-from django.db import connection
+import logging
+import os
+
+logger = logging.getLogger(__name__)
 
 class ParticipantsConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'participants'
 
     def ready(self):
-        """
-        Limpia automáticamente la tabla de participantes al iniciar la app.
-        Se ejecuta tanto en desarrollo como en producción (Render).
-        """
-        try:
-            with connection.cursor() as cursor:
-                cursor.execute('DELETE FROM participants_participant;')
-            print("✅ Todos los participantes fueron eliminados automáticamente.")
-        except Exception as e:
-            print(f"⚠️ No se pudo limpiar la tabla de participantes: {e}")
+        # Solo limpiar en producción, no en dev
+        if os.getenv('DEBUG', 'True') == 'False':
+            try:
+                from participants.models import Participant, Winner
+
+                # Borrar primero los ganadores para evitar errores de FK
+                Winner.objects.all().delete()
+                Participant.objects.all().delete()
+
+                logger.info("Se limpiaron las tablas Participant y Winner correctamente.")
+            except Exception as e:
+                logger.warning(f"No se pudo limpiar la tabla de participantes: {e}")
