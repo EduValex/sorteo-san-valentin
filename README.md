@@ -49,6 +49,29 @@ Sistema Full Stack para gestionar un sorteo de San Valentín donde los participa
 - **SweetAlert2**: Alertas y modales elegantes
 - **canvas-confetti**: Efectos visuales
 
+## Uso
+El sistema está desplegado para su prueba en tiempo real. 
+
+NOTA: Algunos navegadores pueden bloquear la aplicación, se recomienda utilizar Google Chrome
+
+### Para Participantes:
+
+1. **Registro**: Ir a `https://sorteo-san-valentin.vercel.app/` y completar el formulario de registro
+2. **Verificar Email**: Revisar correo electrónico y hacer clic en el link de verificación (Los correos de verificación actualmente pueden llegar a SPAM por la configuración temporal de dominio en SendGrid.)
+3. **Crear Contraseña**: En la página de verificación, crear una contraseña para confirmar participación
+
+### Para Administradores:
+
+1. **Login**: Ir a `https://sorteo-san-valentin.vercel.app/admin/dashboard`
+   - Email: `admin@ctsturismo.cl`
+   - Password: `admin123`
+
+2. **Dashboard**: Ver estadísticas, lista de participantes, historial de ganadores, y realizar el sorteo
+
+3. **Realizar Sorteo**: Click en "Sortear Ganador" para seleccionar un ganador aleatorio
+
+4. Al participante ganador le llegará un correo con la notificación.
+
 ## Estructura del Proyecto
 
 ```
@@ -216,23 +239,6 @@ Para cambiar a modo SMTP real (producción), edita `EMAIL_BACKEND` en `settings.
 
 **IMPORTANTE:** Si el frontend inicia en un puerto diferente a 3000, actualiza la variable `FRONTEND_URL` en el archivo `.env` del backend para que los links de verificación de email apunten al puerto correcto.
 
-## Uso
-
-### Para Participantes:
-
-1. **Registro**: Ir a `http://localhost:3000` y completar el formulario de registro
-2. **Verificar Email**: Revisar correo electrónico y hacer clic en el link de verificación
-3. **Crear Contraseña**: En la página de verificación, crear una contraseña para confirmar participación
-
-### Para Administradores:
-
-1. **Login**: Ir a `http://localhost:3000/admin/login`
-   - Email: `admin@ctsturismo.cl`
-   - Password: `admin123`
-
-2. **Dashboard**: Ver estadísticas, lista de participantes, y realizar el sorteo
-
-3. **Realizar Sorteo**: Click en "Sortear Ganador" para seleccionar un ganador aleatorio
 
 ## Endpoints de la API
 
