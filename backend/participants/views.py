@@ -207,7 +207,7 @@ def test_sendgrid(request):
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 @api_view(['POST'])
-@permission_classes([IsAdminUser])
+@permission_classes([AllowAny])
 def clean_database(request):
     """Limpia participantes y ganadores"""
     Winner.objects.all().delete()
