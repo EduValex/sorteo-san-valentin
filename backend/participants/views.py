@@ -205,3 +205,11 @@ def test_sendgrid(request):
         return Response({'message': 'Correo enviado correctamente!'}, status=status.HTTP_200_OK)
     except Exception as e:
         return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+@api_view(['POST'])
+@permission_classes([IsAdminUser])
+def clean_database(request):
+    """Limpia participantes y ganadores"""
+    Winner.objects.all().delete()
+    Participant.objects.all().delete()
+    return Response({"status": "ok", "message": "Tablas Participant y Winner limpiadas"})
