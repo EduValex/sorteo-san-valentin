@@ -180,6 +180,6 @@ ANYMAIL = {
 }
 
 EMAIL_BACKEND = "anymail.backends.sendgrid.EmailBackend"
-DEFAULT_FROM_EMAIL = os.getenv("DEFAULT_FROM_EMAIL", "noreply@ctsturismo.cl")
+DEFAULT_FROM_EMAIL = "noreply@ctsturismo.cl <{}>".format(os.getenv("DEFAULT_FROM_EMAIL"))
 
 FRONTEND_URL = os.getenv("FRONTEND_URL", "https://sorteo-san-valentin.vercel.app")
