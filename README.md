@@ -56,13 +56,13 @@ NOTA: Algunos navegadores pueden bloquear la aplicación, se recomienda utilizar
 
 ### Para Participantes:
 
-1. **Registro**: Ir a [https://sorteo-san-valentin.vercel.app/]([url](https://sorteo-san-valentin.vercel.app)) y completar el formulario de registro
+1. **Registro**: Ir a [https://sorteo-san-valentin.vercel.app/](https://sorteo-san-valentin.vercel.app/) y completar el formulario de registro
 2. **Verificar Email**: Revisar correo electrónico y hacer clic en el link de verificación (Los correos de verificación actualmente pueden llegar a SPAM por la configuración temporal de dominio en SendGrid.)
 3. **Crear Contraseña**: En la página de verificación, crear una contraseña para confirmar participación
 
 ### Para Administradores:
 
-1. **Login**: Ir a [https://sorteo-san-valentin.vercel.app/admin/dashboard]([url](https://sorteo-san-valentin.vercel.app/admin/dashboard))
+1. **Login**: Ir a [https://sorteo-san-valentin.vercel.app/admin/dashboard](https://sorteo-san-valentin.vercel.app/admin/dashboard)
    - Email: `admin@ctsturismo.cl`
    - Password: `admin123`
 
