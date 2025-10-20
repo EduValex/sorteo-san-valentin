@@ -174,7 +174,6 @@ SIMPLE_JWT = {
 # ==========================
 # EMAIL (SendGrid vía API con AnyMail)
 # ==========================
-INSTALLED_APPS += ["anymail"]
 
 ANYMAIL = {
     "SENDGRID_API_KEY": os.getenv("SENDGRID_API_KEY"),
